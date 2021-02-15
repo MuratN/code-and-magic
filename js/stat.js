@@ -16,8 +16,8 @@ window.renderStatistics = function (ctx, names, times) {
     for (var i = 0 ; i < times.length; i++) {
         var time = times[i];
         if (time > max) {
-        max = time;
-        maxIndex = i;
+            max = time;
+            maxIndex = i;
         }
     }
 
@@ -32,19 +32,15 @@ window.renderStatistics = function (ctx, names, times) {
     var timesMargin = 20;
     
     for(var i = 0; i < times.length; i++) {
-        console.log(step);
+        ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+        ctx.fillText(names[i], initialX + indent * i, initialY + histogramHeight + histogramMargin);
+        ctx.fillText(Math.floor(times[i]), initialX + indent * i, Math.floor(times[i] * step) - 2 * histogramHeight + timesMargin);
         if (names[i] === 'Вы') {
             ctx.fillStyle = 'rgba(255, 0, 0, 1)';
             ctx.fillRect(initialX + indent * i, initialY, barWidth , times[i] * step);
-            ctx.fillStyle = 'rgba(0, 0, 0, 1)';
-            ctx.fillText(names[i], initialX + indent * i, initialY + histogramHeight + histogramMargin);
-            ctx.fillText(Math.floor(times[i]), initialX + indent * i, Math.floor(times[i] * step) - 2 * histogramHeight + timesMargin);
         } else {
             ctx.fillStyle = 'rgba(0, 0, 255, ' + Math.random() + ')';
             ctx.fillRect(initialX + indent * i, initialY, barWidth , times[i] * step);
-            ctx.fillStyle = 'rgba(0, 0, 0, 1)';
-            ctx.fillText(names[i], initialX + indent * i, initialY + histogramHeight + histogramMargin);
-            ctx.fillText(Math.floor(times[i]), initialX + indent * i, Math.floor(times[i] * step) - 2 * histogramHeight + timesMargin);
         }
     }
 }
