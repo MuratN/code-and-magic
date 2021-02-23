@@ -35,7 +35,7 @@ window.renderStatistics = function (ctx, names, times) {
     var indent = 90;
     var initialY = 240;
     var initialX = 140;
-    
+
     for(var i = 0; i < times.length; i++) {
         ctx.fillStyle = 'rgba(0, 0, 0, 1)';
         ctx.fillText(names[i], initialX + indent * i, initialY + 10);
