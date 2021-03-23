@@ -3,69 +3,71 @@
 (function () {
   var URL = 'http://localhost:8888/code-and-magick/data';
 
-  window.upload = function (data, onSuccess) {
+  window.upload = function (data, onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      onSuccess(xhr.response);
+      if (xhr.status === 200) {
+        onLoad(xhr.response);
+      } else {
+        onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
+      }
+    });
+    xhr.addEventListener('error', function () {
+      onError('Произошла ошибка соединения');
     });
 
     xhr.open('POST', URL);
     xhr.send(data);
   };
 
-  window.load = function (onSuccess) {
+  window.load = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
-    xhr.open('GET', URL);
-    var onError = function (message) {
-      // console.error(message);
-    };
     xhr.addEventListener('load', function () {
       var error;
 
       switch (xhr.status) {
         case 200:
-          error = '11';
-          onSuccess(xhr.response);
+          onLoad(xhr.response);
           break;
 
         case 400:
-          error = 'Неверный запрос';
+          onError('Неверный запрос');
+          document.body.append(message);
           break;
         case 401:
-          error = 'Пользователь не авторизован';
+          onError('Пользователь не авторизован');
+          document.body.append(message);
           break;
         case 404:
-          error = 'Ничего не найдено';
+          onError('Ничего не найдено');
+          document.body.append(message);
           break;
 
         default:
-          error = 'Статус ответа: :' + xhr.status + ' ' + xhr.statusText;
-
+          onError('Статус ответа: :' + xhr.status + ' ' + xhr.statusText);
+          var message = document.createElement('div');
+          message.style.position = 'absolute';
+          message.style.left = 410 + 'px';
+          message.style.top = 15 + 'px';
+          message.style.width = 200 + 'px';
+          message.style.height = 50 + 'px';
+          message.style.backgroundColor = '#5c98d0';
+          message.style.borderRadius = 20 + 'px';
+          message.style.textAlign = 'center';
+          message.style.lineHeight = 50 + 'px';
+          message.innerHTML = error;
+          document.body.append(message);
       }
       if (error) {
         onError(error);
       }
-      console.log(error);
-
-      var message = document.createElement('div');
-      message.style.position = 'absolute';
-      message.style.left = 410 + 'px';
-      message.style.top = 15 + 'px';
-      message.style.width = 200 + 'px';
-      message.style.height = 50 + 'px';
-      message.style.backgroundColor = '#5c98d0';
-      message.style.borderRadius = 20 + 'px';
-      message.style.textAlign = 'center';
-      message.style.lineHeight = 50 + 'px';
-      message.innerHTML = error;
-      document.body.append(message);
     });
 
-
+    xhr.open('GET', URL);
     xhr.send();
   };
 })();
