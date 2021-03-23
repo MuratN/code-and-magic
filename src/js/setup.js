@@ -1,7 +1,5 @@
 'use strict';
 
-var WIZARD_NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
-var WIZARD_SURNAME = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
 var WIZARD_COAT = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
 var WIZARD_EYES = ['black', 'red', 'blue', 'yellow', 'green'];
 var FIREBALL_COLOR = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
@@ -34,40 +32,30 @@ setupFireball.addEventListener('click', function () {
   setupFireball.style.backgroundColor = FIREBALL_COLOR[indexFireball % FIREBALL_COLOR.length];
 });
 
-
-var wizardTemp = [];
-
-var getRandomElement = function (arr) {
-  var rand = Math.floor(Math.random() * arr.length);
-  return arr[rand];
-};
-
-for (var i = 0; i < 4; i++) {
-  var randomName = getRandomElement(WIZARD_NAMES);
-  var randomSurname = getRandomElement(WIZARD_SURNAME);
-  var randomCoat = getRandomElement(WIZARD_COAT);
-  var randomEyes = getRandomElement(WIZARD_EYES);
-  wizardTemp.push({
-    name: randomName + ' ' + randomSurname,
-    coatColor: randomCoat,
-    eyesColor: randomEyes
-  });
-}
-
 var getWizardElement = function (wizard) {
   var wizardElement = similarWizardTemplate.cloneNode(true);
 
   wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
-  wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
+  wizardElement.querySelector('.wizard-coat').style.fill = wizard.colorCoat;
   wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
 
   return wizardElement;
 };
 
-var fragment = document.createDocumentFragment();
-for (var j = 0; j < wizardTemp.length; j++) {
-  fragment.appendChild(getWizardElement(wizardTemp[j]));
-}
-similarListElement.appendChild(fragment);
+window.load(function (wizards) {
+  var fragment = document.createDocumentFragment();
+  for (var j = 0; j < 4; j++) {
+    fragment.appendChild(getWizardElement(wizards[j]));
+  }
+  similarListElement.appendChild(fragment);
 
-userDialog.querySelector('.setup-similar').classList.remove('hidden');
+  userDialog.querySelector('.setup-similar').classList.remove('hidden');
+});
+
+var form = userDialog.querySelector('.setup-wizard-form');
+form.addEventListener('submit', function (evt) {
+  window.upload(new FormData(form), function (response) {
+    userDialog.classList.add('hidden');
+  });
+  evt.preventDefault();
+});

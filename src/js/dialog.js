@@ -20,6 +20,8 @@ var onPopupEscPress = function (evt) {
 var openPopup = function () {
   setup.classList.remove('hidden');
   document.addEventListener('keydown', onPopupEscPress);
+  setup.style.top = '';
+  setup.style.left = '';
 };
 
 var closePopup = function () {
@@ -83,7 +85,7 @@ dialogHandle.addEventListener('mousedown', function (evt) {
 
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
-    console.log(dragged);
+
     if (dragged) {
       var onClickPreventDefault = function (evt) {
         evt.preventDefault();
